@@ -26,12 +26,17 @@ dependencies:
   flutter_view_model:
     git:
       url: https://github.com/hhacker1999/flutter_view_model
+  cloud_firestore: ^2.2.0
+  contacts_service: ^0.6.1
   cupertino_icons: ^1.0.2
+  equatable: ^2.0.2
   firebase_auth: ^1.2.0
   firebase_core: ^1.2.0
   get_it: ^7.1.3
   injectable: ^1.4.1
+  permission_handler: ^8.0.0+1
   provider: ^5.0.0
+  shared_preferences: ^2.0.5
 
 dev_dependencies:
   flutter_test:
