@@ -21,6 +21,16 @@ class FirebaseService {
       return true;
   }
 
+  Future<String> getUserName(String? phoneNumber) async {
+    String _name = '';
+    await _instance
+        .collection('users')
+        .doc(phoneNumber)
+        .get()
+        .then((value) => _name = value.data()!['name']);
+    return _name;
+  }
+
   Future<bool> _userRegistration(String? phoneNumber) async {
     try {
       await _instance.collection('users').doc(phoneNumber).set({
@@ -31,7 +41,6 @@ class FirebaseService {
       return false;
     }
   }
-
 
   Future<void> saveUserName(String? phoneNumber, String? name) async {
     try {

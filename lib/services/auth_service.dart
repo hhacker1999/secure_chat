@@ -33,4 +33,8 @@ class AuthService {
     var result = _auth.currentUser;
     return result != null;
   }
+
+  Future<User> currentUser() async {
+    return _auth.currentUser!;
+  }
 }

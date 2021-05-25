@@ -18,6 +18,7 @@ class LoginViewModel extends BaseModel<LoginViewEvent, LoginViewState> {
   late StreamSubscription<LoginViewState> _stateSubscription;
   late String _name;
 
+
   LoginViewModel() : super(InitialState()) {
     _clearSingleton();
   }
@@ -53,6 +54,7 @@ class LoginViewModel extends BaseModel<LoginViewEvent, LoginViewState> {
 
   Future<void> otpSignIn() async {
     var result = await _authManager.otpSignIn(_verId, _otp, _phoneNumber);
+  
     updateState(LoadedState(result));
   }
 
@@ -70,15 +72,17 @@ class LoginViewModel extends BaseModel<LoginViewEvent, LoginViewState> {
         codeAutoRetrievalTimeout: (a) {});
   }
 
-  void _clearSingleton() {
+  Future<void> _clearSingleton() async {
     _stateSubscription = this.state.listen(
-      (state) {
+      (state) async {
         if (state is LoadedState && !state.isNewUser) {
+          await _authManager.saveUserNameToLocalData();
           locator.resetLazySingleton<LoginViewModel>(
             disposingFunction: (i) => i.dispose(),
           );
           _stateSubscription.cancel();
         }
+        else if(state is LoadedState && !state.isNewUser) await _authManager.saveUserNameToLocalData(); 
       },
     );
   }

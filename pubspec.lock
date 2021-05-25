@@ -289,7 +289,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "5b86bf3613612610dd3f538808628f6c95cf4afd"
+      resolved-ref: "5ed0fbe9722b7a90080c66ccf8d6b626d877453f"
       url: "https://github.com/hhacker1999/flutter_view_model"
     source: git
     version: "0.0.1"
@@ -465,7 +465,7 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.0.0+1"
+    version: "8.0.0+2"
   permission_handler_platform_interface:
     dependency: transitive
     description:
