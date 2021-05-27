@@ -12,7 +12,7 @@ class HomeviewmodelLoading extends HomeviewmodelState {}
 class HomeviewLoadedwithNoData extends HomeviewmodelState {}
 
 class HomeviewLoadedwithData extends HomeviewmodelState {
-  final List<ContactModel> model;
+  final List<ConversationModel> model;
 
  const HomeviewLoadedwithData(this.model);
 }

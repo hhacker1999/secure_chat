@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:nigga_chat/app/locator.dart';
 import 'package:nigga_chat/managers/chat_manager.dart';
 import 'package:nigga_chat/models/contact_model.dart';
+import 'package:nigga_chat/models/conversation_model.dart';
 
 part 'homeviewmodel_event.dart';
 part 'homeviewmodel_state.dart';

@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_view_model/flutter_view_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:nigga_chat/app/locator.dart';
 import 'package:nigga_chat/managers/auth_manager.dart';
 import 'package:nigga_chat/managers/contacts_manager.dart';
-import 'package:nigga_chat/services/contacts_service.dart';
-import 'package:nigga_chat/services/permission_handler.dart';
 part 'startupviewmodel_event.dart';
 part 'startupviewmodel_state.dart';
 

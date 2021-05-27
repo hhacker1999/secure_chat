@@ -48,13 +48,13 @@ class LoginViewModel extends BaseModel<LoginViewEvent, LoginViewState> {
 
   Future<void> autoSignIn(PhoneAuthCredential credential) async {
     var result = await _authManager.autoSignIn(credential, _phoneNumber);
-
+if(!result) await _authManager.saveUserNameToLocalData();
     updateState(LoadedState(result));
   }
 
   Future<void> otpSignIn() async {
     var result = await _authManager.otpSignIn(_verId, _otp, _phoneNumber);
-  
+  if(!result) await _authManager.saveUserNameToLocalData();
     updateState(LoadedState(result));
   }
 
@@ -76,7 +76,7 @@ class LoginViewModel extends BaseModel<LoginViewEvent, LoginViewState> {
     _stateSubscription = this.state.listen(
       (state) async {
         if (state is LoadedState && !state.isNewUser) {
-          await _authManager.saveUserNameToLocalData();
+          
           locator.resetLazySingleton<LoginViewModel>(
             disposingFunction: (i) => i.dispose(),
           );

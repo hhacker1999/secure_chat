@@ -60,11 +60,28 @@ class FirebaseService {
         .collection('conversations')
         .doc(other)
         .collection('messages')
+        .orderBy('time', descending: true)
         .snapshots();
   }
 
-  Future<List<String>> getConversations(String phoneNumber) async {
+  Future<void> saveMessages(
+      String phoneNumber, String other, Map<String, dynamic> map) async {
+    await _instance
+        .collection('users')
+        .doc(phoneNumber)
+        .collection('conversations')
+        .doc(other)
+        .collection('messages')
+        .add(map);
+  }
+
+  Future<List<Map<String, dynamic>>> getConversations(
+      String phoneNumber) async {
     List<String> _conversations = [];
+    List<String> _names = [];
+    List<Map<String, dynamic>> _lastMessages = [];
+
+    List<Map<String, dynamic>> _completeConversation = [];
     await _instance
         .collection('users')
         .doc(phoneNumber)
@@ -79,6 +96,34 @@ class FirebaseService {
         );
       },
     );
-    return _conversations;
+
+    await Future.forEach<String>(_conversations, (element) async {
+      var lastMessage = await _instance
+          .collection('users')
+          .doc(phoneNumber)
+          .collection('conversations')
+          .doc(element)
+          .collection('messages')
+          .orderBy('time', descending: true)
+          .get();
+
+      _lastMessages.add(lastMessage.docs.first.data());
+    });
+
+    await Future.forEach<String>(_conversations, (element) async {
+      var names = await _instance.collection('users').doc(element).get();
+
+      _names.add(names.data()!['name']);
+    });
+
+    for (int i = 0; i < _conversations.length; i++) {
+      _completeConversation.add({
+        'phoneNumber': _conversations[i],
+        'name': _names[i],
+        'message': _lastMessages[i]['message'],
+        'time': _lastMessages[i]['time']
+      });
+    }
+    return _completeConversation;
   }
 }

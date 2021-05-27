@@ -1,6 +1,7 @@
 class AppConstants {
-  //Routes
+  //**Routes**//
   static const String startUpView = '/';
-  static const String loginView = 'loginView';
-  static const String homeView = 'homeView';
+  static const String loginView = '/loginView';
+  static const String homeView = '/homeView';
+  static const String chatView = '/chatView';
 }
