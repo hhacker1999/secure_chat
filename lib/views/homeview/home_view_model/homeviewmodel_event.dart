@@ -12,3 +12,5 @@ class HomeviewmodelLoadEvent extends HomeviewmodelEvent {}
 class HomeviewmodelTapOnChatButtonEvent extends HomeviewmodelEvent{}
 
 class HomeviewmodelTapOnContactButtonEvent extends HomeviewmodelEvent{}
+
+

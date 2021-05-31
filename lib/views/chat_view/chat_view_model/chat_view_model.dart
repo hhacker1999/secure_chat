@@ -2,18 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_view_model/flutter_view_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:nigga_chat/app/locator.dart';
+import 'package:nigga_chat/managers/auth_manager.dart';
 import 'package:nigga_chat/managers/chat_manager.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nigga_chat/models/chat_model.dart';
-import 'package:nigga_chat/services/auth_service.dart';
-import 'package:nigga_chat/services/local_data_service.dart';
 part 'package:nigga_chat/views/chat_view/chat_view_model/chat_view_event.dart';
 part 'package:nigga_chat/views/chat_view/chat_view_model/chat_view_state.dart';
 
 @lazySingleton
 class ChatViewModel extends BaseModel<ChatViewEvent, ChatViewState> {
   final ChatManager _chatManager = locator<ChatManager>();
-  final AuthService _authService = locator<AuthService>();
+  final AuthManager _authManager = locator<AuthManager>();
   ChatViewModel() : super(ChatViewStateLoading());
 
   @override
@@ -21,13 +20,13 @@ class ChatViewModel extends BaseModel<ChatViewEvent, ChatViewState> {
     if (event is LoadChatEvent) {
       await getMessages(event.other);
     } else if (event is SendMessageEvent) {
-      var result = await _authService.currentUser();
+      var result = await _authManager.currentUser();
       ChatModel model = ChatModel(
           message: event.message,
-          sentBy: result.phoneNumber!,
+          sentBy: result.phoneNumber,
           sentTo: event.other,
           time: event.time);
-      await _chatManager.saveMessages(result.phoneNumber!, event.other, model);
+      await _chatManager.saveMessages(result.phoneNumber, event.other, model);
     }
   }
 

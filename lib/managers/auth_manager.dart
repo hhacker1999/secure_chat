@@ -50,6 +50,11 @@ class AuthManager {
     await _localDataService.create('user', modelToSave);
   }
 
+  Future<UserModel> currentUser() async {
+    var result = await _localDataService.read('user');
+    return UserModel.fromJson(result);
+  }
+
   Future<bool> isLoggedIn() async {
     return _authService.isLoggedIn();
   }

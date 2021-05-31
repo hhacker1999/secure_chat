@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:injectable/injectable.dart';
 import 'package:nigga_chat/app/locator.dart';
 import 'package:nigga_chat/models/contact_model.dart';
@@ -15,27 +14,37 @@ class ContactsManager {
   final LocalDataService _localDataService = locator<LocalDataService>();
 
   Future<void> getAndSaveContactsOnStartup() async {
-    List<String?> _list = [];
+    List<String?> _listPhones = [];
+    List<String?> _listNames = [];
+    List<Map<String, dynamic>> _mapList = [];
     await _permissionHandlerServices.requestContactsPermission();
     var result = await _contactsService.getContacts();
     result.forEach((contact) {
+      _listNames.add(contact.displayName);
       contact.phones!.toSet().forEach((phone) {
-        _list.add(phone.value);
+        _listPhones.add(phone.value);
       });
     });
-    _list.forEach(
+    _listPhones.forEach(
       (element) {
         element!.replaceAll(' ', '');
       },
     );
-    var listToSave = _list.map((e) => ContactModel(phoneNumber: e!)).toList();
-var encodedList = listToSave.map((e) => e.toJson()).toList();
-    var encodeList = json.encode(encodedList);
+
+    for (int i = 0; i < _listPhones.length; i++) {
+      _mapList.add({
+        'phoneNumber': _listPhones[i],
+        'name': _listNames[i],
+      });
+    }
+
+    var encodeList = json.encode(_mapList);
     await _localDataService.create('contacts', encodeList);
   }
 
   Future<List<ContactModel>> getContacts() async {
     var result = await _localDataService.read('contacts');
-    return json.decode(result);
+    List listToConvert = json.decode(result);
+    return listToConvert.map((e) => ContactModel.fromMap(e)).toList();
   }
 }

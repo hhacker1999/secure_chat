@@ -1,70 +1,112 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:nigga_chat/models/conversation_model.dart';
 import 'package:sizerutil/sizerutil.dart';
 
-class ConversationWidget extends StatelessWidget {
-  final String phoneNumber;
-  final String name;
-  final String message;
-  final Timestamp time;
-  const ConversationWidget({
+class ConversationsWidget extends StatelessWidget {
+  final List<ConversationModel> model;
+  final String ownName;
+  const ConversationsWidget({
     Key? key,
-    required this.phoneNumber,
-    required this.name,
-    required this.message,
-    required this.time,
+    required this.model,
+    required this.ownName,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 13.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      height: 94.h,
+      width: 94.w,
+      color: Colors.black,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          SizedBox(
-            width: 22.w,
-            child: CircleAvatar(
-              child: Icon(Icons.person),
-              radius: 35.f,
-              backgroundColor: Color(0xff2F23A4),
+          Text(
+            'Good morning, $ownName',
+            style: TextStyle(
+              fontSize: 20.f,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w700,
             ),
           ),
           SizedBox(
-            width: 2.w,
-            child: VerticalDivider(
-              thickness: 3,
+            height: 2.h,
+          ),
+          Text(
+            'Your messages',
+            style: TextStyle(
+              fontSize: 42.f,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(
-            width: 65.w,
+            height: 10.h,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: model.length,
+              itemBuilder: (_, index) => ConversationCard(
+                  otherPartyName: model[index].name,
+                  message: model[index].message),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ConversationCard extends StatelessWidget {
+  final String otherPartyName;
+  final String message;
+  const ConversationCard({
+    Key? key,
+    required this.otherPartyName,
+    required this.message,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 40.f,
+            backgroundColor: Colors.black,
+            child: (SvgPicture.asset('assets/user.svg')),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Flexible(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '$name($phoneNumber)',
+                  otherPartyName,
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.black),
+                    fontSize: 21.f,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 SizedBox(
-                  height: 2.5.h,
+                  height: 10,
                 ),
                 Text(
-                  '(${time.toDate().toString().substring(0, time.toDate().toString().length - 7)}) $message',
+                  message,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 18.f,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w600,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                )
               ],
             ),
           ),
