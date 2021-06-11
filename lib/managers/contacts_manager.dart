@@ -21,9 +21,7 @@ class ContactsManager {
     var result = await _contactsService.getContacts();
     result.forEach((contact) {
       _listNames.add(contact.displayName);
-      contact.phones!.toSet().forEach((phone) {
-        _listPhones.add(phone.value);
-      });
+      _listPhones.add(contact.phones!.toList()[0].value);
     });
     _listPhones.forEach(
       (element) {
@@ -31,13 +29,12 @@ class ContactsManager {
       },
     );
 
-    for (int i = 0; i < _listPhones.length; i++) {
+    _listPhones.asMap().entries.forEach((element) {
       _mapList.add({
-        'phoneNumber': _listPhones[i],
-        'name': _listNames[i],
+        'phoneNumber': element.value,
+        'name': _listNames[element.key],
       });
-    }
-
+    });
     var encodeList = json.encode(_mapList);
     await _localDataService.create('contacts', encodeList);
   }
